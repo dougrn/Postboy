@@ -10,12 +10,6 @@
 
 ---
 
-## 🎨 Preview
-![Postboy Showcase](https://raw.githubusercontent.com/placeholder/postboy/main/showcase.png)
-*Uma interface moderna e minimalista projetada para foco e produtividade.*
-
----
-
 ## 🔥 Principais Funcionalidades
 
 ### 🚀 Performance e Rede
@@ -44,10 +38,10 @@
 ### 2. Início Rápido
 ```bash
 # Clone o repositório
-git clone https://github.com/dougrn/PostBoy.git
+git clone https://github.com/dougrn/Postboy.git
 
 # Entre no diretório
-cd PostBoy
+cd Postboy
 
 # Instale as dependências
 pip install -r requirements.txt
