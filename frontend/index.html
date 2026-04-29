@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Postboy | Pocket API Client</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="logo">
+            <span>⚡</span> Postboy
+        </div>
+
+        <div class="sidebar-section">
+            <div class="section-header">
+                <span>Collections</span>
+                <button class="btn-outline" style="padding: 2px 6px; font-size: 10px;" onclick="createNewCollection()">+</button>
+            </div>
+            <div id="collections-list">
+                <!-- Loaded via JS -->
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="section-header">
+                <span>Environments</span>
+                <button class="btn-outline" style="padding: 2px 6px; font-size: 10px;" onclick="createNewEnvironment()">+</button>
+            </div>
+            <select id="env-selector" class="mt-2" style="width: 100%;">
+                <option value="">No Environment</option>
+            </select>
+            <div id="envs-list" class="mt-2"></div>
+        </div>
+
+        <div class="sidebar-section" style="margin-top: auto;">
+            <button class="btn-outline" style="width: 100%;" onclick="importPostman()">Import Postman</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="request-bar">
+            <select id="method" class="method-select">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PUT">PUT</option>
+                <option value="DELETE">DELETE</option>
+                <option value="PATCH">PATCH</option>
+            </select>
+            <input type="text" id="url" class="url-input" placeholder="https://api.example.com/resource">
+            <button class="btn btn-primary" onclick="sendRequest()">Send</button>
+            <button class="btn btn-outline" onclick="saveRequest()">Save</button>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tabs-header">
+                <div class="tab active" data-tab="params">Params</div>
+                <div class="tab" data-tab="headers">Headers</div>
+                <div class="tab" data-tab="body">Body</div>
+                <div class="tab" data-tab="auth">Auth</div>
+            </div>
+            <div class="tab-content" id="tab-params">
+                <div id="params-list"></div>
+                <button class="btn-outline mt-2" onclick="addRow('params')">+ Add Param</button>
+            </div>
+            <div class="tab-content hidden" id="tab-headers">
+                <div id="headers-list"></div>
+                <button class="btn-outline mt-2" onclick="addRow('headers')">+ Add Header</button>
+            </div>
+            <div class="tab-content hidden" id="tab-body">
+                <select id="body-type" onchange="toggleBodyType()">
+                    <option value="none">None</option>
+                    <option value="json">JSON</option>
+                    <option value="text">Text</option>
+                </select>
+                <textarea id="body-content" class="mt-2 hidden" style="width: 100%; height: 150px; font-family: monospace;" placeholder='{"key": "value"}'></textarea>
+            </div>
+            <div class="tab-content hidden" id="tab-auth">
+                <select id="auth-type">
+                    <option value="none">No Auth</option>
+                    <option value="bearer">Bearer Token</option>
+                    <option value="basic">Basic Auth</option>
+                </select>
+                <div id="auth-config" class="mt-2"></div>
+            </div>
+        </div>
+
+        <div class="response-container">
+            <div class="response-meta">
+                <span>Status: <span id="res-status" class="status-code">---</span></span>
+                <span>Time: <span id="res-time">0</span> ms</span>
+                <span>Size: <span id="res-size">0</span> B</span>
+            </div>
+            <div id="response-body" class="response-body">
+                Response will appear here...
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-container" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 id="modal-title">Title</h3>
+            <div id="modal-body" class="mt-2"></div>
+            <div class="modal-footer mt-2">
+                <button class="btn btn-outline" id="modal-cancel">Cancel</button>
+                <button class="btn btn-primary" id="modal-confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
