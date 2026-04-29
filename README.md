@@ -1,100 +1,100 @@
 # ⚡ Postboy
-> **The ultimate local-first API client for high-performance testing.**
+> **O cliente de API local-first definitivo para testes de alta performance.**
 
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue?style=for-the-badge&logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![UI](https://img.shields.io/badge/UI-Glassmorphism-purple?style=for-the-badge)](frontend/styles.css)
 
-**Postboy** is a lightweight, blazing-fast, and local-first alternative to heavy API clients. Designed with a premium **Glassmorphism Dark Mode**, it offers a seamless experience for developers who value speed, privacy, and aesthetics.
+**Postboy** é uma alternativa leve, extremamente rápida e focada em privacidade para os clientes de API tradicionais. Projetado com uma interface moderna em **Glassmorphism Dark Mode**, ele oferece uma experiência fluida para desenvolvedores que valorizam velocidade, privacidade e estética.
 
 ---
 
 ## 🎨 Preview
 ![Postboy Showcase](https://raw.githubusercontent.com/placeholder/postboy/main/showcase.png)
-*A sleek, modern interface designed for focus and productivity.*
+*Uma interface moderna e minimalista projetada para foco e produtividade.*
 
 ---
 
-## 🔥 Key Features
+## 🔥 Principais Funcionalidades
 
-### 🚀 Performance & Network
-- **Async Engine**: Powered by `HTTPX` for lightning-fast concurrent requests.
-- **Variable Injection**: Full support for `{{variable}}` substitution in URLs, headers, and bodies.
-- **Multi-Environment**: Seamlessly switch between Local, Staging, and Production contexts.
+### 🚀 Performance e Rede
+- **Motor Async**: Equipado com `HTTPX` para requisições concorrentes ultrarrápidas.
+- **Injeção de Variáveis**: Suporte completo para substituição de `{{variavel}}` em URLs, headers e corpos (body).
+- **Multi-Ambiente**: Alterne facilmente entre contextos de Local, Staging e Produção.
 
-### 💎 User Experience (UX)
-- **Glassmorphism UI**: A beautiful dark interface with subtle transparency and blur effects.
-- **Smart Modals**: Custom, non-blocking modal system for a fluid workflow.
-- **Scroll Optimized**: Handles massive JSON responses (multi-MB) without UI freezing.
-- **Postman Sync**: Instant import for your existing v2.1 Collections.
+### 💎 Experiência do Usuário (UX)
+- **Interface Glassmorphism**: Um visual dark sofisticado com efeitos de transparência e desfoque (blur).
+- **Modais Inteligentes**: Sistema de modais customizados e não-bloqueantes para um fluxo de trabalho contínuo.
+- **Otimizado para Scroll**: Lida com respostas JSON gigantescas (vários MBs) sem travar a interface.
+- **Sincronização Postman**: Importação instantânea para suas coleções existentes (v2.1).
 
-### 🛡️ Privacy & Security
-- **Local-First**: Your data never leaves your machine. No cloud, no account required.
-- **JSON Storage**: Human-readable persistence in the `/data` directory.
+### 🛡️ Privacidade e Segurança
+- **Local-First**: Seus dados nunca saem da sua máquina. Sem nuvem, sem necessidade de login.
+- **Armazenamento JSON**: Persistência em arquivos JSON legíveis na pasta `/data`.
 
 ---
 
-## 📦 Installation & Setup
+## 📦 Instalação e Configuração
 
-### 1. Requirements
+### 1. Requisitos
 - Python 3.10+
-- Pip (Python package manager)
+- Pip (Gerenciador de pacotes do Python)
 
-### 2. Quick Start
+### 2. Início Rápido
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/postboy.git
+# Clone o repositório
+git clone https://github.com/dougrn/PostBoy.git
 
-# Enter the directory
-cd postboy
+# Entre no diretório
+cd PostBoy
 
-# Install dependencies
+# Instale as dependências
 pip install -r requirements.txt
 
-# Run the engine
+# Execute o motor
 python main.py
 ```
 
-### 3. Access the Dashboard
-Open your favorite browser and go to:
+### 3. Acesso ao Dashboard
+Abra seu navegador favorito e acesse:
 👉 **[http://localhost:8000](http://localhost:8000)**
 
 ---
 
-## 📂 Project Anatomy
+## 📂 Anatomia do Projeto
 ```bash
-├── 🐍 backend/     # FastAPI app, models, and request engine
-├── 🎨 frontend/    # HTML/CSS (Glassmorphism) and Vanilla JS
-├── 📂 data/        # Your local collections & environment data (ignored by git)
-├── 📚 specs/       # Technical documentation & roadmap
-└── 🚀 main.py      # Entry point
+├── 🐍 backend/     # API, modelos e motor de requisições em Python
+├── 🎨 frontend/    # Interface HTML/CSS (Glassmorphism) e Vanilla JS
+├── 📂 data/        # Suas coleções locais e dados de ambiente (ignorado pelo git)
+├── 📚 specs/       # Documentação técnica e roadmap
+└── 🚀 main.py      # Ponto de entrada da aplicação
 ```
 
 ---
 
-## 🛠️ Tech Stack
+## 🛠️ Tecnologias Utilizadas
 - **Core**: [FastAPI](https://fastapi.tiangolo.com/)
 - **Networking**: [HTTPX](https://www.python-httpx.org/)
-- **Aesthetics**: Vanilla CSS3 + [Inter Font](https://fonts.google.com/specimen/Inter)
-- **Logic**: Vanilla JS (ES6+)
+- **Estética**: Vanilla CSS3 + [Inter Font](https://fonts.google.com/specimen/Inter)
+- **Lógica**: Vanilla JS (ES6+)
 
 ---
 
 ## 🗺️ Roadmap
-- [ ] Pre-request & Post-request Scripts (JS)
-- [ ] Response Visualizers (Charts & HTML)
-- [ ] Export to cURL / Postman
-- [ ] Full OAuth2 Helper
+- [ ] Suporte a Scripts Pré-request e Post-request (JS)
+- [ ] Visualizadores de Resposta (Gráficos e HTML)
+- [ ] Exportação para cURL / Postman
+- [ ] Assistente completo de OAuth2
 
-## 🤝 Contributing
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+## 🤝 Contribuições
+Contribuições são o que tornam a comunidade open source um lugar incrível para aprender, inspirar e criar. Qualquer contribuição que você fizer será **muito apreciada**.
 
 ---
 
-## 📄 License
-Distributed under the **MIT License**. See `LICENSE` for more information.
+## 📄 Licença
+Distribuído sob a **Licença MIT**. Veja `LICENSE` para mais informações.
 
 <p align="center">
-  Developed with ❤️ by the Postboy Team
+  Desenvolvido com ❤️ pela Equipe Postboy
 </p>
