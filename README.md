@@ -94,7 +94,3 @@ Contribuições são o que tornam a comunidade open source um lugar incrível pa
 
 ## 📄 Licença
 Distribuído sob a **Licença MIT**. Veja `LICENSE` para mais informações.
-
-<p align="center">
-  Desenvolvido com ❤️ pela Equipe Postboy
-</p>
