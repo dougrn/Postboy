@@ -18,12 +18,24 @@ class RequestData(BaseModel):
     body: Optional[Any] = None
     auth_type: str = "none" # none, bearer, basic
     auth_config: Dict[str, str] = {}
+    pre_script: Optional[str] = None  # JavaScript to run before request
+    post_script: Optional[str] = None  # JavaScript to run after request
+
+class Folder(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid4()))
+    name: str
+    description: Optional[str] = ""
+    items: List[RequestData] = []
+    folders: List['Folder'] = []  # Nested folders
+
+Folder.update_forward_refs()
 
 class Collection(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid4()))
     name: str
     description: Optional[str] = ""
     items: List[RequestData] = []
+    folders: List[Folder] = []  # Top-level folders
 
 class Environment(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid4()))
@@ -35,3 +47,4 @@ class HistoryItem(BaseModel):
     timestamp: str
     request: RequestData
     response: Dict[str, Any]
+

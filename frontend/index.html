@@ -6,6 +6,7 @@
     <title>Postboy | Pocket API Client</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.css">
 </head>
 <body>
     <div class="sidebar">
@@ -16,7 +17,10 @@
         <div class="sidebar-section">
             <div class="section-header">
                 <span>Collections</span>
-                <button class="btn-outline" style="padding: 2px 6px; font-size: 10px;" onclick="createNewCollection()">+</button>
+                <div>
+                    <button class="btn-outline" style="padding: 2px 6px; font-size: 10px;" onclick="createNewFolder()" title="New Folder">📁</button>
+                    <button class="btn-outline" style="padding: 2px 6px; font-size: 10px;" onclick="createNewCollection()">+</button>
+                </div>
             </div>
             <div id="collections-list">
                 <!-- Loaded via JS -->
@@ -35,6 +39,7 @@
         </div>
 
         <div class="sidebar-section" style="margin-top: auto;">
+            <button class="btn-outline" style="width: 100%; margin-bottom: 0.5rem;" onclick="showHistoryModal()">History</button>
             <button class="btn-outline" style="width: 100%;" onclick="importPostman()">Import Postman</button>
         </div>
     </div>
@@ -48,7 +53,10 @@
                 <option value="DELETE">DELETE</option>
                 <option value="PATCH">PATCH</option>
             </select>
-            <input type="text" id="url" class="url-input" placeholder="https://api.example.com/resource">
+            <div class="input-copy-wrapper">
+                <input type="text" id="url" class="url-input" placeholder="https://api.example.com/resource">
+                <button class="copy-btn" title="Copy URL" onclick="copyValueById('url')">&#128203;</button>
+            </div>
             <button class="btn btn-primary" onclick="sendRequest()">Send</button>
             <button class="btn btn-outline" onclick="saveRequest()">Save</button>
         </div>
@@ -59,6 +67,9 @@
                 <div class="tab" data-tab="headers">Headers</div>
                 <div class="tab" data-tab="body">Body</div>
                 <div class="tab" data-tab="auth">Auth</div>
+                <div class="tab" data-tab="scripts">Scripts</div>
+                <div class="tab" data-tab="websocket">WebSocket</div>
+                <div class="tab" data-tab="console">Console</div>
             </div>
             <div class="tab-content" id="tab-params">
                 <div id="params-list"></div>
@@ -69,20 +80,70 @@
                 <button class="btn-outline mt-2" onclick="addRow('headers')">+ Add Header</button>
             </div>
             <div class="tab-content hidden" id="tab-body">
-                <select id="body-type" onchange="toggleBodyType()">
-                    <option value="none">None</option>
-                    <option value="json">JSON</option>
-                    <option value="text">Text</option>
-                </select>
-                <textarea id="body-content" class="mt-2 hidden" style="width: 100%; height: 150px; font-family: monospace;" placeholder='{"key": "value"}'></textarea>
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <select id="body-type" onchange="toggleBodyType()">
+                        <option value="none">None</option>
+                        <option value="json">JSON</option>
+                        <option value="text">Text</option>
+                        <option value="form-data">Form Data</option>
+                        <option value="graphql">GraphQL</option>
+                    </select>
+                </div>
+                <div id="body-content-container" style="position:relative; margin-top: 0.5rem;" class="hidden">
+                    <textarea id="body-content" class="mt-2" style="width: 100%; height: 300px; font-family: monospace;" placeholder='{"key": "value"}'></textarea>
+                    <div id="body-editor" style="height: 300px; border: 1px solid var(--border-color); display: none;"></div>
+                </div>
+
+                <div id="graphql-container" class="mt-2 hidden">
+                    <textarea id="graphql-query" style="width: 100%; height: 150px; font-family: monospace;" placeholder="query { ... }"></textarea>
+                    <textarea id="graphql-vars" class="mt-2" style="width: 100%; height: 80px; font-family: monospace;" placeholder='{"variable": "value"}'></textarea>
+                </div>
+                <div id="form-data-container" class="mt-2 hidden">
+                    <div id="form-data-rows"></div>
+                    <button class="btn-outline mt-2" onclick="addFormDataRow()">+ Add Field</button>
+                </div>
             </div>
             <div class="tab-content hidden" id="tab-auth">
-                <select id="auth-type">
+                <select id="auth-type" onchange="renderAuthConfig()">
                     <option value="none">No Auth</option>
                     <option value="bearer">Bearer Token</option>
                     <option value="basic">Basic Auth</option>
                 </select>
                 <div id="auth-config" class="mt-2"></div>
+            </div>
+            <div class="tab-content hidden" id="tab-scripts">
+                <div style="margin-bottom: 0.5rem;">
+                    <strong>Pre-request Script</strong>
+                    <span style="font-size: 0.7rem; color: var(--text-secondary);"> Runs before request is sent</span>
+                </div>
+                <textarea id="pre-script" class="code-editor" style="width: 100%; height: 100px; font-family: 'Fira Code', monospace; font-size: 0.8rem;" placeholder="// Access to 'request' object&#10;// Modify request.url, request.headers, etc.&#10;console.log('Request:', request.url);"></textarea>
+
+                <div style="margin: 1rem 0 0.5rem;">
+                    <strong>Tests</strong>
+                    <span style="font-size: 0.7rem; color: var(--text-secondary);"> Runs after response is received</span>
+                </div>
+                <textarea id="post-script" class="code-editor" style="width: 100%; height: 100px; font-family: 'Fira Code', monospace; font-size: 0.8rem;" placeholder="// Access to 'response' object&#10;// Use tests['name'] = { passed: bool, message: string }&#10;tests['Status is 200'] = response.status === 200;"></textarea>
+                <div id="test-results" class="mt-2" style="font-size: 0.8rem;"></div>
+            </div>
+            <div class="tab-content hidden" id="tab-console">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <strong>Developer Console</strong>
+                    <button class="btn btn-primary" style="padding: 4px 12px;" onclick="runConsole()">Run</button>
+                </div>
+                <textarea id="console-input" class="code-editor" style="width: 100%; height: 120px; font-family: 'Fira Code', monospace; font-size: 0.8rem; margin-top: 0.5rem;" placeholder="// Access to 'request' and 'response' objects&#10;console.log('URL:', request.url);&#10;console.log('Status:', response.status);"></textarea>
+                <div id="console-output" style="height: 150px; overflow-y: auto; background: #0d1117; padding: 0.5rem; font-family: 'Fira Code', monospace; font-size: 0.8rem; border: 1px solid var(--border-color); margin-top: 0.5rem;"></div>
+            </div>
+            <div class="tab-content hidden" id="tab-websocket">
+                <div class="flex-row mt-2">
+                    <input type="text" id="ws-url" placeholder="ws://echo.websocket.org" style="flex:1">
+                    <button id="ws-connect-btn" class="btn btn-primary" onclick="toggleWebSocket()">Connect</button>
+                </div>
+                <div id="ws-status" class="mt-2" style="font-size: 0.8rem; color: var(--text-secondary)">Disconnected</div>
+                <div class="flex-row mt-2">
+                    <input type="text" id="ws-message" placeholder="Message..." style="flex:1">
+                    <button class="btn btn-outline" onclick="sendWSMessage()">Send</button>
+                </div>
+                <div id="ws-log" class="mt-2" style="height: 150px; overflow-y: auto; background: #0d1117; padding: 0.5rem; font-size: 0.8rem; font-family: monospace; border: 1px solid var(--border-color)"></div>
             </div>
         </div>
 
@@ -91,9 +152,14 @@
                 <span>Status: <span id="res-status" class="status-code">---</span></span>
                 <span>Time: <span id="res-time">0</span> ms</span>
                 <span>Size: <span id="res-size">0</span> B</span>
+                <button class="btn-outline" style="padding: 2px 8px; font-size: 10px;" onclick="toggleResponseHeaders()">Headers</button>
             </div>
-            <div id="response-body" class="response-body">
-                Response will appear here...
+            <div id="response-headers" class="hidden" style="padding: 0.5rem 1rem; border-bottom: 1px solid var(--border-color); font-size: 0.8rem; background: #0d1117; max-height: 150px; overflow-y: auto;"></div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div id="response-body" class="response-body" style="flex: 1;">
+                    Response will appear here...
+                </div>
+                <button class="copy-btn" title="Copy Response" onclick="copyResponse()">&#128203;</button>
             </div>
         </div>
     </div>
@@ -109,6 +175,18 @@
         </div>
     </div>
 
+    <div id="history-modal" class="modal-overlay hidden">
+        <div class="modal-card" style="width: 600px; max-height: 80vh; display: flex; flex-direction: column;">
+            <h3>Request History</h3>
+            <button class="btn-outline" style="position: absolute; top: 1.5rem; right: 1.5rem;" onclick="clearHistory()">Clear All</button>
+            <div id="history-list" style="flex: 1; overflow-y: auto; margin-top: 1rem;"></div>
+            <div class="modal-footer mt-2">
+                <button class="btn btn-outline" onclick="closeHistoryModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsoneditor/9.10.0/jsoneditor.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

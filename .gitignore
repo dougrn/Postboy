@@ -33,3 +33,7 @@ data/
 # OS
 .DS_Store
 Thumbs.db
+
+.vscode/
+.openclaude/
+tests/
